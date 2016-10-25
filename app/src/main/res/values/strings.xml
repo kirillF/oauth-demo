@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">OAuth</string>
+    <string name="client_id">YOUR_CLIENT_ID</string>
+    <string name="client_secret">YOUR_CLIENT_SECRET</string>
+    <string name="title_text">GitHub OAuth Demo</string>
+    <string name="callback_url">http://example.com</string>
+
+    <string name="auth_url">https://github.com/login/oauth/authorize?client_id=%1$s%2$sredirect_url=%3$s%4$scope=user</string>
+    <string name="token_url">https://github.com/login/oauth/access_token?client_id=%1$s%2$sclient_secret=%3$s%4$scode=%5$s</string>
+    <string name="emails_url">https://api.github.com/users/%1$s/followers?access_token=%2$s</string>
+
+    <string name="login_hint">login</string>
+    <string name="password_hint">password</string>
+    <string name="login_button">login</string>
+    <string name="show_followers">Show followers</string>
+</resources>
+
