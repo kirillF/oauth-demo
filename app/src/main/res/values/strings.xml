@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">OAuth</string>
     <string name="client_id">YOUR_CLIENT_ID</string>
-    <string name="client_secret">YOUR_CLIENT_SECRETE</string>
+    <string name="client_secret">YOUR_CLIENT_SECRET</string>
     <string name="title_text">GitHub OAuth Demo</string>
     <string name="callback_url">http://example.com</string>
 
