@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">OAuth</string>
     <string name="client_id">YOUR_CLIENT_ID</string>
-    <string name="client_secret">YOUR_CLIENT_SECRET</string>
+    <string name="client_secret">YOUR_CLIENT_SECRETE</string>
     <string name="title_text">GitHub OAuth Demo</string>
     <string name="callback_url">http://example.com</string>
 
@@ -13,5 +13,8 @@
     <string name="password_hint">password</string>
     <string name="login_button">login</string>
     <string name="show_followers">Show followers</string>
+    <string name="show_as_data">Show Followers</string>
+    <string name="show_as_json">Show as JSON</string>
+    <string name="error_gettings_followers">Error getting followers list</string>
 </resources>
 

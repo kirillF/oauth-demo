@@ -21,7 +21,7 @@ import com.github.kirillf.oauth.auth.WebViewActivity;
 public class LoginFragment extends Fragment {
     private static final int REQUEST_CODE = 100;
 
-    private static final String USERNAME = "USER_NAME";
+    private static final String USERNAME = "ybereza";
 
     private String accessToken;
 
