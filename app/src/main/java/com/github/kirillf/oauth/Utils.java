@@ -1,5 +1,8 @@
 package com.github.kirillf.oauth;
 
+import com.github.kirillf.oauth.github.Followers;
+import com.github.kirillf.oauth.github.User;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
