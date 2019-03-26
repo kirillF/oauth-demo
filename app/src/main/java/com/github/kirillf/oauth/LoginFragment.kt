@@ -20,7 +20,11 @@ class LoginFragment : Fragment() {
 
     private var accessToken = ""
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val v = inflater.inflate(R.layout.login_fragment, container, false)
 
         val login = v.findViewById<View>(R.id.login_button) as Button
@@ -29,7 +33,7 @@ class LoginFragment : Fragment() {
         val loginClickListener = LoginClickListener()
         login.setOnClickListener(loginClickListener)
 
-        val listener = ShowCommitsListener()
+        val listener = ShowFollowersListener()
         showFollowers.setOnClickListener(listener)
         return v
     }
@@ -61,19 +65,20 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private inner class ShowCommitsListener : View.OnClickListener {
+    private inner class ShowFollowersListener : View.OnClickListener {
 
         override fun onClick(v: View) {
-            val fragment = FollowersFragment.create(accessToken!!, USERNAME)
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.container, fragment)
-                    .addToBackStack(null)
-                    .commit()
+            val fragment = FollowersFragment.create(accessToken, USERNAME)
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 
     companion object {
-        private val REQUEST_CODE = 100
+        private const val REQUEST_CODE = 100
 
-        private val USERNAME = "ybereza"
+        private const val USERNAME = "ybereza"
     }
 }

@@ -16,6 +16,7 @@ import com.github.kirillf.oauth.okhttp.LoggingInterceptor
 import okhttp3.*
 
 import java.io.IOException
+import java.lang.ref.WeakReference
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.TimeUnit
@@ -26,7 +27,7 @@ import javax.net.ssl.HttpsURLConnection
  * Created by kirillf on 10/25/16.
  */
 
-class FollowersFragment : Fragment() {
+class FollowersFragment : Fragment(), ResultReceiver {
 
     private var accessToken: String? = null
     private var username: String? = null
@@ -62,7 +63,7 @@ class FollowersFragment : Fragment() {
         val followersRequestUrl = context!!.getString(R.string.emails_url)
         parseArguments(arguments!!)
         val url = String.format(followersRequestUrl, username, accessToken)
-        EmailsRequest().execute(url)
+        FollowersRequest(createClient(), this).execute(url)
         return v
     }
 
@@ -80,7 +81,17 @@ class FollowersFragment : Fragment() {
         }
     }
 
-    private inner class EmailsRequest : AsyncTask<String, Void, Followers>() {
+    override fun onFollowersResult(followers: Followers) {
+        this.followers = followers
+        switchButtonState()
+    }
+
+    override fun onError(strId: Int) {
+        textView.setText(strId)
+    }
+
+    private class FollowersRequest(val client: OkHttpClient, resultReceiver: ResultReceiver) : AsyncTask<String, Void, Followers>() {
+        val receiverRef: WeakReference<ResultReceiver> = WeakReference(resultReceiver)
 
         override fun doInBackground(vararg params: String): Followers? {
             //return getUsingUrlConnection(params[0]);
@@ -89,11 +100,10 @@ class FollowersFragment : Fragment() {
 
         override fun onPostExecute(res: Followers?) {
             super.onPostExecute(res)
-            if (res != null) {
-                followers = res
-                switchButtonState()
-            } else {
-                textView.setText(R.string.error_gettings_followers)
+            receiverRef.get()?.apply {
+                res?.let {
+                    onFollowersResult(it)
+                } ?: onError(R.string.error_gettings_followers)
             }
         }
 
@@ -115,25 +125,26 @@ class FollowersFragment : Fragment() {
 
             return null
         }
-    }
 
-    private fun getUsingOkHttp(url: String): Followers {
-        try {
-            val request = Request.Builder()
+        private fun getUsingOkHttp(url: String): Followers {
+            try {
+                val request = Request.Builder()
                     .url(url)
                     .header("User-Agent", "Technotrack")
                     .build()
 
-            val response = createClient().newCall(request).execute()
-            if (response.isSuccessful) {
-                return Followers.createFromJSON(response.body()!!.string())
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    return Followers.createFromJSON(response.body()!!.string())
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
 
-        return Followers()
+            return Followers()
+        }
     }
+
 
     private fun crateClientWithBasicAuth() : OkHttpClient {
         return OkHttpClient.Builder().authenticator(object : Authenticator {
@@ -154,6 +165,7 @@ class FollowersFragment : Fragment() {
                 .build()
     }
 
+
     companion object {
         private val ACCESS_TOKEN = "access_token"
         private val USERNAME = "username"
@@ -168,4 +180,9 @@ class FollowersFragment : Fragment() {
             return fragment
         }
     }
+}
+
+interface ResultReceiver {
+    fun onFollowersResult(followers: Followers)
+    fun onError(strId: Int)
 }
